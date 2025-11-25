@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI Stock Market Predictor - Live Trading Dashboard</title>
+
+    <!-- Local style (replace if you use different path) -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="background-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="grid-lines"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>AI Stock Predictor</h1>
+                        <p>Real-time Market Analysis & Predictions</p>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <!-- Search box with autocomplete -->
+                    <div class="search-box" id="searchBoxRoot">
+                        <input type="text" id="searchInput" placeholder="Search symbol or company (e.g., AAPL, TCS.NS, BTCUSDT)"/>
+                        <button id="searchBtn" title="Search"><i class="fas fa-search"></i></button>
+
+                        <!-- autocomplete dropdown -->
+                        <div id="autocompleteList" class="autocomplete-list" aria-hidden="true"></div>
+                    </div>
+
+                    <div class="last-update">
+                        <span class="update-label">Last Updated</span>
+                        <span class="update-time" id="lastUpdateTime">--:--:--</span>
+                        <div id="liveIndicator" class="live-indicator" title="Live updates status">• Live</div>
+                    </div>
+
+                    <button class="refresh-btn" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Market Status Banner -->
+    <section class="market-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="status-indicator">
+                    <i class="fas fa-circle pulse"></i>
+                    <span class="status-text">Market Status: <strong id="marketStatus">OPEN</strong></span>
+                </div>
+                <p class="banner-description">
+                    Live data from Finnhub • AI-powered predictions • Real-time news updates
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Quick controls (history / pinned) -->
+            <section class="controls-section">
+                <div class="controls-row">
+                    <div class="history-chips" id="searchHistory"></div>
+                    <div class="favorites-chips" id="pinnedList"></div>
+                </div>
+            </section>
+
+            <!-- Stock Cards Grid -->
+            <section class="stocks-section">
+                <div class="stock-grid" id="stockGrid">
+                    <!-- Stock cards will be dynamically generated here -->
+                </div>
+            </section>
+
+            <!-- News and Details Section -->
+            <section class="details-section" id="detailsSection" style="display: none;">
+                <div class="details-grid">
+                    <!-- News Panel -->
+                    <div class="news-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fas fa-newspaper"></i>
+                                <div>
+                                    <h2>Latest News</h2>
+                                    <p id="newsCompanyName">Select a stock to view news</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-content" id="newsContent">
+                            <div class="loading-state">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Loading news...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock Details Panel -->
+                    <div class="details-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <i class="fas fa-chart-bar"></i>
+                                <h2>Stock Details</h2>
+                            </div>
+                        </div>
+                        <div class="details-content" id="detailsContent">
+                            <!-- Stock details will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Setup Instructions -->
+            <section class="setup-section">
+                <div class="setup-card">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Setup Instructions
+                    </h3>
+                    <div class="setup-content">
+                        <p><strong>✓ Finnhub:</strong> Autocomplete, real-time websocket, and quotes use Finnhub. Add a free API key in <code>app.js</code> (FINNHUB_KEY).</p>
+                        <p><strong>○ News API:</strong> Get your free API key from <a href="https://newsapi.org" target="_blank" rel="noopener">newsapi.org</a> and add it to the JavaScript file.</p>
+                        <p class="setup-note">Replace placeholders at top of <code>app.js</code>: <code>FINNHUB_KEY</code> and <code>NEWS_API_KEY</code>. The WebSocket will try to connect automatically.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI Stock Predictor. Data provided by Finnhub. Predictions are for informational purposes only.</p>
+        </div>
+    </footer>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Main JavaScript File -->
+    <script src="app.js"></script>
+</body>
+</html>
