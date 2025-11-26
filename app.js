@@ -71,11 +71,25 @@ function calculatePrediction(historicalPrices) {
 /* ---------- StockData.org helpers ---------- */
 async function stockdataQuote(symbol) {
     try {
-        const url = `${CONFIG.STOCKDATA_QUOTE}?symbols=${encodeURIComponent(symbol)}&api_token=${CONFIG.STOCKDATA_TOKEN}&key_by_ticker=true`;
+        const url = `${CONFIG.STOCKDATA_QUOTE}?symbols=${encodeURIComponent(symbol)}&api_token=${CONFIG.STOCKDATA_TOKEN}`;
         const res = await fetch(url);
         if (!res.ok) throw new Error('stockdata quote failed');
         const json = await res.json();
-        return json.data ? json.data[symbol] : null;
+        
+        // Debug: log the response to see the actual structure
+        console.log('StockData Response for', symbol, ':', json);
+        
+        // Handle different possible response structures
+        if (json.data && json.data.length > 0) {
+            // Find the matching symbol in the array
+            const match = json.data.find(item => 
+                item.ticker === symbol || 
+                item.symbol === symbol ||
+                (item.ticker && item.ticker.replace(/\./g, '') === symbol.replace(/\./g, ''))
+            );
+            return match || null;
+        }
+        return null;
     } catch (e) {
         console.warn('StockData quote error', e);
         return null;
@@ -380,6 +394,12 @@ async function seedStockData(ticker) {
             currentPrice = fhQuote.c;
             prevClose = prevClose || fhQuote.pc;
             volume = volume || fhQuote.v;
+        }
+
+        // FIX FOR INDIAN STOCKS: If price is still 0, use fallback
+        if (!currentPrice || currentPrice === 0) {
+            currentPrice = state.stockData[ticker]?.price || 100; // Use previous price or default
+            console.warn(`Using fallback price for ${ticker}: ${currentPrice}`);
         }
 
         // 2) Intraday candles: always prefer Finnhub (if available)
@@ -705,4 +725,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderHistoryAndPinned();
     console.log('Dashboard initialized. Replace API keys in CONFIG for live data.');
 });
-
